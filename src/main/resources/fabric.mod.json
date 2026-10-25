@@ -1,0 +1,7 @@
+{
+ "schemaVersion":1,"id":"chunkspeedrun","version":"1.0.0","name":"Чанк на скорость",
+ "description":"Single-chunk survival speedrun with persistent dual timers and moderated records.",
+ "environment":"client","entrypoints":{"main":["ru.chunkspeedrun.ChunkSpeedrun"]},
+ "mixins":["chunkspeedrun.mixins.json"],
+ "depends":{"fabricloader":">=0.19.5","minecraft":"26.3","java":">=25"}
+}

@@ -1,0 +1,5 @@
+{
+ "required":true,"package":"ru.chunkspeedrun.mixin","compatibilityLevel":"JAVA_25",
+ "mixins":["ServerMixin","CommandsMixin","GameModeMixin","LevelMixin","FluidMixin","ExplosionMixin","PistonMixin","PlayerMixin","TextAccess","DisplayAccess"],
+ "client":["IntegratedMixin","MouseMixin","InputMixin","TitleMixin"],"injectors":{"defaultRequire":1}
+}

@@ -1,0 +1,8 @@
+instance/
+build/
+__pycache__/
+*.pyc
+*.sqlite3*
+*.log
+*.tmp
+receiver-runtime/
