@@ -2,6 +2,7 @@ import argparse
 import base64
 import json
 import re
+import os
 import subprocess
 import threading
 import time
@@ -17,7 +18,7 @@ def publish(repository,url):
     gh('api','--method','PUT',path,'--input','-',input_data=json.dumps(payload))
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--repo',default='Xvobuk/chunk-speedrun');p.add_argument('--runtime',required=True);p.add_argument('--cloudflared',required=True);p.add_argument('--port',type=int,default=8765);a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--repo',default='Xvobuk/chunk-speedrun');p.add_argument('--runtime',required=True);p.add_argument('--port',type=int,default=24873);a=p.parse_args()
     try:
         with urllib.request.urlopen(f'http://127.0.0.1:{a.port}/health',timeout=2) as response:
             if json.load(response).get('repository')==a.repo:
@@ -26,19 +27,27 @@ def main():
     server=create_server(a.repo,a.runtime,a.port)
     threading.Thread(target=server.serve_forever,daemon=True).start()
     runtime=Path(a.runtime);runtime.mkdir(parents=True,exist_ok=True)
+    ssh=Path(os.environ.get('SystemRoot','C:/Windows'))/'System32/OpenSSH/ssh.exe'
+    key=runtime/'receiver-tunnel-key'
+    if not key.exists():
+        subprocess.run([str(ssh.with_name('ssh-keygen.exe')),'-t','ed25519','-N','','-C','ChunkSpeedrunReceiver','-f',str(key),'-q'],check=True,creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
     try:
         while True:
-            command=[a.cloudflared,'tunnel','--url',f'http://127.0.0.1:{a.port}','--no-autoupdate']
+            command=[str(ssh),'-T','-p','443','-R',f'0:127.0.0.1:{a.port}','-i',str(key),'-o','BatchMode=yes','-o','StrictHostKeyChecking=accept-new','-o',f'UserKnownHostsFile={runtime / "known_hosts"}','-o','ServerAliveInterval=30','-o','ServerAliveCountMax=3','qr@free.pinggy.io']
             process=subprocess.Popen(command,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True,encoding='utf-8',errors='replace',creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
             published=False
             try:
                 for line in process.stdout:
                     print(line.rstrip(),flush=True)
-                    match=re.search(r'https://[a-z0-9-]+\.trycloudflare\.com',line)
+                    match=re.search(r'https://[a-z0-9-]+\.free\.pinggy\.net',line)
                     if match and not published:
                         url=match[0]
                         for attempt in range(4):
-                            try:publish(a.repo,url);published=True;break
+                            try:
+                                request=urllib.request.Request(url+'/health',headers={'User-Agent':'ChunkSpeedrun-26.3','X-Pinggy-No-Screen':'1'})
+                                with urllib.request.urlopen(request,timeout=10) as health:
+                                    if json.load(health).get('repository')!=a.repo:raise RuntimeError('Wrong receiver')
+                                publish(a.repo,url);published=True;break
                             except Exception:time.sleep(3)
                         if published:
                             (runtime/'endpoint.json').write_text(json.dumps(dict(url=url,pid=process.pid)),encoding='utf-8');print('Receiver URL published to GitHub: '+url,flush=True)

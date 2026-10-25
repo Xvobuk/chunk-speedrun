@@ -230,7 +230,7 @@ public class ChunkSpeedrun implements ModInitializer {
     private static void submit(Result result,String endpoint)throws Exception{
         if(result.activeMillis()<=0||result.totalMillis()<result.activeMillis()||!result.nickname().matches("[A-Za-z0-9_]{3,16}"))throw new IOException("Invalid local result");
         URI uri=URI.create(endpoint.replaceAll("/+$","")+"/results");if(!"https".equalsIgnoreCase(uri.getScheme())&&!("http".equalsIgnoreCase(uri.getScheme())&&Set.of("127.0.0.1","localhost").contains(uri.getHost())))throw new IOException("HTTPS receiver required");
-        var response=HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(10)).build().send(HttpRequest.newBuilder(uri).timeout(Duration.ofSeconds(45)).header("Content-Type","application/json").POST(HttpRequest.BodyPublishers.ofString(JSON.toJson(result))).build(),HttpResponse.BodyHandlers.ofString());if(response.statusCode()!=200&&response.statusCode()!=201)throw new IOException("Receiver HTTP "+response.statusCode());
+        var response=HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(10)).build().send(HttpRequest.newBuilder(uri).timeout(Duration.ofSeconds(45)).header("Content-Type","application/json").header("User-Agent","ChunkSpeedrun-26.3").header("X-Pinggy-No-Screen","1").POST(HttpRequest.BodyPublishers.ofString(JSON.toJson(result))).build(),HttpResponse.BodyHandlers.ofString());if(response.statusCode()!=200&&response.statusCode()!=201)throw new IOException("Receiver HTTP "+response.statusCode());
         Files.writeString(GAME_DIR.resolve("chunkspeedrun-results").resolve(result.attemptId()+".json.sent"),config.repository+"\n"+response.body());
     }
 }
