@@ -1,0 +1,29 @@
+PASS Hard locked
+PASS Survival enforced
+PASS 16 block border
+PASS Full vertical range includes top build layer
+PASS Natural logs in initial chunk
+PASS Timer waits before input
+PASS Cannot mine outside chunk
+PASS Outside blocks immutable during run
+PASS Creative mode rejected
+PASS Difficulty command rejected
+PASS Teleport clamped to chunk
+PASS Input starts active timer
+PASS Pause excluded from active timer
+PASS Total timer includes pause
+PASS Reset command creates fresh attempt
+PASS Reset clears inventory
+PASS Reset restores all initial block states
+PASS Two floating leaderboards exist
+PASS Final chest blocks completion
+PASS Water blocks completion
+PASS Air and bedrock finish run
+PASS Finish removes chunk boundary
+PASS Result persisted locally
+PASS Saved state contains timers and completion
+PASS Reset works after completion
+PASS Attempt identity survives world exit and reload
+PASS Time outside world excluded from active timer
+PASS Full timer includes world exit
+ALL INTEGRATION CHECKS PASSED
