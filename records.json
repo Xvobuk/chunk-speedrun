@@ -1,1 +1,10 @@
-{}
+{
+  "b081f2af-cc37-4f6e-a650-8c3661696faa": {
+    "activeMillis": 314,
+    "attemptId": "b081f2af-cc37-4f6e-a650-8c3661696faa",
+    "issue": 1,
+    "nickname": "ChunkTester",
+    "rules": "26.3-hard-air-bedrock-v1",
+    "totalMillis": 317
+  }
+}
