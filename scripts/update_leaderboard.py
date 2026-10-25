@@ -27,7 +27,7 @@ def parse_issue(issue):
     match = re.fullmatch(r'ChunkSpeedrun result ([a-f0-9-]{36})',issue.get('title',''))
     if not match or 'pull_request' in issue:
         return None
-    body = (issue.get('body') or '').strip()
+    body = (issue.get('body') or '').replace('\r\n','\n').strip()
     if not body.startswith('```json\n') or not body.endswith('\n```') or len(body)>4096:
         return None
     try:

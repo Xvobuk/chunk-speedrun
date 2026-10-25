@@ -8,10 +8,12 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import ru.chunkspeedrun.ChunkSpeedrun;
 @Mixin(ServerPlayerGameMode.class)
 public abstract class GameModeMixin {
  @Shadow @Final protected ServerPlayer player;
+ @Inject(method="handleBlockBreakAction",at=@At("HEAD")) private void beginBreak(BlockPos pos,net.minecraft.network.protocol.game.ServerboundPlayerActionPacket.Action action,net.minecraft.core.Direction direction,int height,int sequence,CallbackInfo ci){if(ChunkSpeedrun.locked()&&ChunkSpeedrun.run.inside(pos))ChunkSpeedrun.signalInput();}
  @Inject(method="destroyBlock",at=@At("HEAD"),cancellable=true) private void destroy(BlockPos pos,CallbackInfoReturnable<Boolean> cir){
   if(ChunkSpeedrun.locked()&&!ChunkSpeedrun.run.inside(pos)){cir.setReturnValue(false);return;}ChunkSpeedrun.signalInput();
  }

@@ -12,6 +12,7 @@ class LeaderboardTest(unittest.TestCase):
         board=tables({row['attemptId']:row},{})
         self.assertEqual(board['verified'],[])
         self.assertEqual(board['unverified'][0]['status'],'unverified')
+        self.assertIsNotNone(parse_issue({**self.issue,'body':self.issue['body'].replace('\n','\r\n')}))
     def test_authoritative_confirmation(self):
         row=parse_issue(self.issue)
         board=tables({row['attemptId']:{**row,'activeMillis':1}},{'verified':[row]})

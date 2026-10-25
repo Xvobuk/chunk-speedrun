@@ -62,13 +62,13 @@ def create_server(repository,runtime,port=24873):
                     recent=json.loads(gh('issue','list','--repo',repository,'--state','all','--limit','1000','--json','title,url,body'))
                     existing=next((i for i in recent if i['title']==title),None)
                     if existing:
-                        body=existing['body'].strip()
+                        body=existing['body'].replace('\r\n','\n').strip()
                         old=validate(json.loads(body[8:-4])) if body.startswith('```json\n') and body.endswith('\n```') else None
                         if old!=row:return self.reply(409,dict(error='Attempt already exists'))
                         url=existing['url'];code=200
                     else:
                         with tempfile.TemporaryDirectory(dir=runtime) as directory:
-                            bodyfile=Path(directory)/'result.md';bodyfile.write_text('```json\n'+json.dumps(row,ensure_ascii=False,indent=2)+'\n```\n',encoding='utf-8')
+                            bodyfile=Path(directory)/'result.md';bodyfile.write_text('```json\n'+json.dumps(row,ensure_ascii=False,indent=2)+'\n```\n',encoding='utf-8',newline='\n')
                             url=gh('issue','create','--repo',repository,'--title',title,'--body-file',str(bodyfile)).strip();code=201
                     accepted[aid]=(row,url)
                     self.reply(code,dict(issue=url,status='unverified'))
