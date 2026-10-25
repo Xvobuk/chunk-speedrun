@@ -1,15 +1,5 @@
 {
   "rules": "26.3-hard-air-bedrock-v1",
-  "unverified": [
-    {
-      "activeMillis": 365,
-      "attemptId": "cb90101e-6779-4fb9-9370-6fca06caf566",
-      "issue": 2,
-      "nickname": "ChunkTester",
-      "rules": "26.3-hard-air-bedrock-v1",
-      "status": "unverified",
-      "totalMillis": 367
-    }
-  ],
+  "unverified": [],
   "verified": []
 }
