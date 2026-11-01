@@ -6,3 +6,9 @@ __pycache__/
 *.log
 *.tmp
 receiver-runtime/
+.dev.vars
+.env
+.env.*
+!.env.example
+node_modules/
+.wrangler/

@@ -1,5 +1,7 @@
 param([string]$RuntimeDirectory=(Join-Path $PSScriptRoot '..\..\work\receiver-runtime'))
 $ErrorActionPreference='Stop'
+$endpoint=Get-Content (Join-Path $PSScriptRoot 'submission-endpoint.json') -Raw | ConvertFrom-Json
+if($endpoint.hosting -eq 'cloudflare-workers'){Write-Output ('Cloudflare receiver is hosted online: '+$endpoint.url);return}
 New-Item -ItemType Directory -Force $RuntimeDirectory | Out-Null
 $RuntimeDirectory=(Resolve-Path -LiteralPath $RuntimeDirectory).Path
 try {$health=Invoke-RestMethod 'http://127.0.0.1:24873/health' -TimeoutSec 2; if($health.repository -eq 'Xvobuk/chunk-speedrun'){Write-Output 'Receiver is already running.';return}} catch {}

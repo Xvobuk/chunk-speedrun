@@ -13,6 +13,9 @@ from receiver import gh,create_server
 def publish(repository,url):
     path=f'repos/{repository}/contents/submission-endpoint.json'
     current=json.loads(gh('api',path))
+    configured=json.loads(base64.b64decode(current['content']))
+    if configured.get('hosting')=='cloudflare-workers':
+        raise SystemExit('Permanent Cloudflare receiver configured; tunnel must not replace it')
     value=json.dumps(dict(url=url,updatedAt=time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())),indent=2)+'\n'
     payload=dict(message='Update anonymous submission receiver',content=base64.b64encode(value.encode()).decode(),branch='main',sha=current['sha'])
     gh('api','--method','PUT',path,'--input','-',input_data=json.dumps(payload))
