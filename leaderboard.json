@@ -1,5 +1,15 @@
 {
   "rules": "26.3-hard-air-bedrock-v1",
-  "unverified": [],
+  "unverified": [
+    {
+      "activeMillis": 7200000,
+      "attemptId": "217291a7-2768-4fef-90f0-c26dd8151556",
+      "issue": 3,
+      "nickname": "CFHostingTest",
+      "rules": "26.3-hard-air-bedrock-v1",
+      "status": "unverified",
+      "totalMillis": 7260000
+    }
+  ],
   "verified": []
 }
